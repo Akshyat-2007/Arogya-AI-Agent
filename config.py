@@ -5,8 +5,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
+    # Database path: use /tmp/ on serverless platforms (like Vercel) because root is read-only
+    if os.environ.get('VERCEL') == '1':
+        default_db = 'sqlite:////tmp/nutrition_agent.db'
+    else:
+        default_db = 'sqlite:///nutrition_agent.db'
+
     SECRET_KEY = os.environ.get('SECRET_KEY', 'nutrition-agent-super-secret-key-1234')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///nutrition_agent.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', default_db)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Gemini API Configuration
