@@ -1,0 +1,20 @@
+# Environment configuration files (contains API keys)
+.env
+
+# SQLite local databases
+*.db
+
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE files
+.idea/
+.vscode/
