@@ -1,18 +1,13 @@
-{% extends "base.html" %}
-
-{% block title %}Chat with Arogya AI - Personal Nutrition Assistant{% endblock %}
-
-{% block content %}
-{% if not selected_member %}
+<% if (!selected_member) { %>
 <div class="glass-card-static text-center p-5 my-5">
     <i class="fas fa-comments fa-4x text-grad-primary mb-3"></i>
     <h3 class="fw-bold mb-2">Setup Your Profiles First</h3>
     <p class="text-secondary max-width-500 mx-auto mb-4">No family profiles exist yet. Please create a member profile to start chatting with your AI nutrition coach.</p>
-    <a href="{{ url_for('web.profiles') }}" class="btn btn-grad px-4 py-2">
+    <a href="/profiles" class="btn btn-grad px-4 py-2">
         <i class="fas fa-plus me-2"></i>Create Profile
     </a>
 </div>
-{% else %}
+<% } else { %>
 <div class="row justify-content-center">
     <div class="col-lg-10">
         <!-- Chat Interface Card -->
@@ -33,9 +28,9 @@
                 <div class="d-flex align-items-center gap-2">
                     <span class="small text-secondary fw-semibold d-none d-sm-inline">Chatting For:</span>
                     <select class="form-select form-select-sm border-secondary-subtle" id="chatMemberSelect" style="width: auto; min-width: 150px;">
-                        {% for m in members %}
-                        <option value="{{ m.id }}" {% if m.id == selected_member.id %}selected{% endif %}>{{ m.name }}</option>
-                        {% endfor %}
+                        <% members.forEach(function(m) { %>
+                        <option value="<%= m.id %>" <%= m.id === selected_member.id ? 'selected' : '' %>><%= m.name %></option>
+                        <% }); %>
                     </select>
                 </div>
             </div>
@@ -63,11 +58,10 @@
         </div>
     </div>
 </div>
-{% endif %}
-{% endblock %}
+<% } %>
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+<% contentFor('scripts') %>
+<script src="/static/js/chat.js"></script>
 <script>
     function setQuickPrompt(promptText) {
         const input = document.getElementById('chatInput');
@@ -77,4 +71,4 @@
         }
     }
 </script>
-{% endblock %}
+<% %>

@@ -1,26 +1,18 @@
-import os
-from dotenv import load_dotenv
+require('dotenv').config();
+const path = require('path');
 
-# Load environment variables from .env file
-load_dotenv()
+const isVercel = process.env.VERCEL === '1';
+const defaultDb = isVercel
+  ? 'sqlite:////tmp/nutrition_agent.db'
+  : 'sqlite:///' + path.join(__dirname, 'nutrition_agent.db');
 
-class Config:
-    # Database path: use /tmp/ on serverless platforms (like Vercel) because root is read-only
-    if os.environ.get('VERCEL') == '1':
-        default_db = 'sqlite:////tmp/nutrition_agent.db'
-    else:
-        default_db = 'sqlite:///nutrition_agent.db'
+const Config = {
+  SECRET_KEY: process.env.SECRET_KEY || 'nutrition-agent-super-secret-key-1234',
+  DATABASE_URL: process.env.DATABASE_URL || defaultDb,
+  GEMINI_API_KEY: process.env.GOOGLE_API_KEY,
+  GEMINI_MODEL: process.env.GEMINI_MODEL || 'gemini-3.5-flash',
 
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'nutrition-agent-super-secret-key-1234')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', default_db)
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
-    # Gemini API Configuration
-    GEMINI_API_KEY = os.environ.get('GOOGLE_API_KEY')
-    GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-3.5-flash')
-
-    # Editable Agent Customization Config
-    AGENT_INSTRUCTIONS = """
+  AGENT_INSTRUCTIONS: `
 You are "Arogya AI", a certified digital personal nutrition assistant and health coach. Your goal is to guide users and their family members toward healthier lifestyles through personalized, practical, and culturally appropriate nutrition advice.
 
 Follow these instructions strictly in all interactions:
@@ -57,4 +49,7 @@ Follow these instructions strictly in all interactions:
    - Present meal options (Breakfast, Lunch, Snacks, Dinner) in bulleted lists or neat tables.
    - Provide portion sizes in common household measurements (e.g., "1 katori (bowl) of dal", "2 medium phulkas", "1 tablespoon seeds").
    - Keep suggestions actionable, listing ingredients that are easily available in Indian grocery stores.
-"""
+`
+};
+
+module.exports = Config;
