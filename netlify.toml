@@ -1,0 +1,11 @@
+[build]
+  functions = "netlify/functions"
+  publish = "static"
+
+[functions]
+  included_files = ["views/**", "static/**", "instance/**"]
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/api"
+  status = 200

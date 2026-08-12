@@ -8,7 +8,7 @@ if (Config.DATABASE_URL.startsWith('sqlite:')) {
   // Extract storage path from SQLite URL
   // e.g., sqlite:///path/to/file or sqlite:////tmp/file
   let storagePath;
-  if (process.env.VERCEL === '1') {
+  if (process.env.VERCEL === '1' || process.env.NETLIFY === 'true') {
     storagePath = '/tmp/nutrition_agent.db';
   } else {
     storagePath = path.join(__dirname, 'instance', 'nutrition_agent.db');
