@@ -16,7 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('layout', 'layout'); // Defaults to views/layout.ejs
 
 // Serve Static Files
-app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/static', express.static(path.join(__dirname, 'dist', 'static')));
 
 // Register Routes
 app.use('/', require('./routes/web'));

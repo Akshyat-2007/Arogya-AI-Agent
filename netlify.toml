@@ -1,9 +1,9 @@
 [build]
   functions = "netlify/functions"
-  publish = "static"
+  publish = "dist"
 
 [functions]
-  included_files = ["views/**", "static/**", "instance/**"]
+  included_files = ["views/**", "dist/static/**", "instance/**"]
   external_node_modules = ["sqlite3"]
 
 [[redirects]]
