@@ -81,12 +81,23 @@ function ProfilesContent() {
         });
         fetchMembers();
       } else {
-        const data = await res.json();
-        alert(`Error: ${data.error}`);
+        let errMsg = 'Failed to save profile.';
+        try {
+          const data = await res.json();
+          errMsg = data.error || errMsg;
+        } catch (jsonErr) {
+          try {
+            const text = await res.text();
+            errMsg = text.substring(0, 200) || res.statusText;
+          } catch (textErr) {
+            errMsg = res.statusText;
+          }
+        }
+        alert(`Error: ${errMsg}`);
       }
     } catch (err) {
       console.error(err);
-      alert('Failed to save profile.');
+      alert(`Failed to save profile: ${err.message || err}`);
     }
   };
 
@@ -102,12 +113,23 @@ function ProfilesContent() {
         setIsEditModalOpen(false);
         fetchMembers();
       } else {
-        const data = await res.json();
-        alert(`Error: ${data.error}`);
+        let errMsg = 'Failed to update profile.';
+        try {
+          const data = await res.json();
+          errMsg = data.error || errMsg;
+        } catch (jsonErr) {
+          try {
+            const text = await res.text();
+            errMsg = text.substring(0, 200) || res.statusText;
+          } catch (textErr) {
+            errMsg = res.statusText;
+          }
+        }
+        alert(`Error: ${errMsg}`);
       }
     } catch (err) {
       console.error(err);
-      alert('Failed to update profile.');
+      alert(`Failed to update profile: ${err.message || err}`);
     }
   };
 
