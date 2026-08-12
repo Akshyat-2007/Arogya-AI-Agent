@@ -1,12 +1,3 @@
 [build]
-  functions = "netlify/functions"
-  publish = "dist"
-
-[functions]
-  included_files = ["views/**", "dist/static/**", "instance/**"]
-  external_node_modules = ["sqlite3"]
-
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/api"
-  status = 200
+  command = "npm run build"
+  publish = ".next"
