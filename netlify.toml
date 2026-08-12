@@ -4,6 +4,7 @@
 
 [functions]
   included_files = ["views/**", "static/**", "instance/**"]
+  external_node_modules = ["sqlite3"]
 
 [[redirects]]
   from = "/*"
