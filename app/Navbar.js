@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 export default function Navbar() {
   const pathname = usePathname();
   const [theme, setTheme] = useState('dark');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     // Initial theme setup
@@ -19,7 +21,29 @@ export default function Navbar() {
       document.body.classList.add('dark-mode');
       localStorage.setItem('theme', 'dark');
     }
+
+    // Check login state
+    const token = localStorage.getItem('auth_token');
+    const storedUser = localStorage.getItem('auth_user');
+    if (token) {
+      setIsLoggedIn(true);
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_user');
+    setIsLoggedIn(false);
+    setUser(null);
+    window.location.href = '/login';
+  };
 
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
@@ -93,6 +117,28 @@ export default function Navbar() {
             </li>
           </ul>
           <div className="d-flex align-items-center gap-3">
+            {isLoggedIn ? (
+              <div className="d-flex align-items-center gap-2">
+                <span className="small text-secondary d-none d-md-inline me-1">
+                  Hi, {user?.username || user?.email?.split('@')[0]}
+                </span>
+                <button
+                  className="btn btn-outline-glass btn-sm py-1.5 px-3 rounded-3"
+                  onClick={handleLogout}
+                >
+                  <i className="fas fa-sign-out-alt me-1"></i>Logout
+                </button>
+              </div>
+            ) : (
+              pathname !== '/login' && (
+                <Link
+                  href="/login"
+                  className="btn btn-grad btn-sm py-1.5 px-3 rounded-3 text-white text-decoration-none"
+                >
+                  <i className="fas fa-sign-in-alt me-1"></i>Login
+                </Link>
+              )
+            )}
             <button
               className="btn-theme-toggle"
               onClick={toggleTheme}
